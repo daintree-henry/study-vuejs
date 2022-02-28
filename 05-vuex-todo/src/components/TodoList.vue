@@ -1,10 +1,10 @@
 <template>
   <div>
     <transition-group name="list" tag="ul">
-      <li v-bind:key="todoItem.item" v-for="(todoItem, index) in this.$store.state.todoItems" class="shadow">
-        <font-awesome-icon icon="fa-check" class="checkBtn" v-on:click="toggleComplete(todoItem,index)" v-bind:class="{checkBtnCompleted: todoItem.completed}"/>
+      <li v-bind:key="todoItem.item" v-for="(todoItem, index) in this.storedTodoItems" class="shadow">
+        <font-awesome-icon icon="fa-check" class="checkBtn" v-on:click="toggleComplete({todoItem,index})" v-bind:class="{checkBtnCompleted: todoItem.completed}"/>
         <span v-bind:class="{textCompleted: todoItem.completed}">{{todoItem.item}}</span>
-        <span class="removeBtn" v-on:click="removeTodo(todoItem, index)">
+        <span class="removeBtn" v-on:click="removeTodo({todoItem, index})">
           <font-awesome-icon icon="trash-alt" />
         </span>
       </li>
@@ -13,14 +13,18 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
+
 export default {
   methods:{
-    removeTodo(todoItem, index){
-      this.$store.commit('removeTodo', {todoItem, index});
-    },
-    toggleComplete(todoItem,index){
-      this.$store.commit('toggleComplete', {todoItem, index});
-    }
+    ...mapMutations(['removeTodo','toggleComplete']),
+  },
+  computed:{
+    ...mapGetters(['storedTodoItems'])
+    //컨포넌트에 선언된 이름과 다를 경우
+    // ...mapGetters({
+    //   todoItems: 'storedTodoItems'
+    // })
   }
 }
 </script>
