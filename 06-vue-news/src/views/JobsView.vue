@@ -1,40 +1,25 @@
 <template>
   <div>
-    <div v-for="job in jobs">{{job.title}}</div>
+    <p v-for="job in fetchedJobs">
+      <a :href="job.url">
+        {{ job.title }}
+      </a>
+      <small> {{ job.time_ago }} {{job.domain}} </small>
+    </p>
   </div>
 </template>
 
 <script>
-import {fetchJobsList} from '../api/index'
+import { mapGetters } from 'vuex';
 
 export default {
-  data() {
-    return {
-      jobs: []
-    }
+  computed: {
+    ...mapGetters(['fetchedJobs'])
   },
-  created () {
-    console.log('호출 전: ', this); // <- 호출 전: Vue  객체
-    // var vm = this;
-    // fetchJobsList()
-    //   .then(function(response){
-    //     console.log('호출 후: ',this); // <- 다른스코프(프로미스) 이기 때문에 호출 후: undefined
-    //     vm.jobs = response.data
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
-    fetchJobsList()
-      .then(response => {
-        console.log('호출 후: ',this); // <- 화살표 함수를 사용하면 호출 후 동일한 객체 리턴 
-        this.jobs = response.data
-      })
-      .catch(err => {
-        console.log(err);
-      });
+  created() {
+    this.$store.dispatch('FETCH_JOBS');
   },
 }
-
 </script>
 
 <style>
