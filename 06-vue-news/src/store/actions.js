@@ -1,39 +1,8 @@
-import { fetchNewsList, fetchJobsList, fetchAskList, fetchUserInfo, fetchItemInfo, fetchList } from '../api/index'
+import { fetchUserInfo, fetchItemInfo, fetchList } from '../api/index'
 
 export default {
-  FETCH_NEWS(context){
-    fetchNewsList()
-      .then(response => {
-        //mutation을 통해서만 state 변경 가능
-        context.commit('SET_NEWS', response.data);
-        return response;
-      })
-      .catch(error => {
-        console.log(error);
-      })
-  },
-  FETCH_JOBS({commit}){
-    fetchJobsList()
-      .then(({data}) => {
-        //mutation을 통해서만 state 변경 가능
-        commit('SET_JOBS', data);
-      })
-      .catch(error => {
-        console.log(error);
-      })
-  },
-  FETCH_ASK({commit}){
-    fetchAskList()
-      .then(({data}) => {
-        //mutation을 통해서만 state 변경 가능
-        commit('SET_ASK', data);
-      })
-      .catch(error => {
-        console.log(error);
-      })
-  },
   FETCH_USER({ commit }, name){
-    fetchUserInfo(name)
+    return fetchUserInfo(name)
       .then(({data}) => {
         commit('SET_USER', data);
       })
@@ -42,7 +11,7 @@ export default {
       })
   },
   FETCH_ITEM({ commit }, id){
-    fetchItemInfo(id)
+    return fetchItemInfo(id)
       .then(({data}) => {
         commit('SET_ITEM', data);
       })
@@ -51,8 +20,11 @@ export default {
       })
   },
   FETCH_LIST({commit}, pageName){
-    fetchList(pageName)
-      .then(({data})=>commit('SET_LIST', data))
+    return fetchList(pageName)
+      .then(response=>{
+        commit('SET_LIST', response.data)
+        return response;
+      })
       .catch(error => console.log(error));
   },
 }
