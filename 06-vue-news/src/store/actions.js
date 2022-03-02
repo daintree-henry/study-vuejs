@@ -19,12 +19,13 @@ export default {
         console.log(error);
       })
   },
-  FETCH_LIST({commit}, pageName){
-    return fetchList(pageName)
-      .then(response=>{
-        commit('SET_LIST', response.data)
-        return response;
-      })
-      .catch(error => console.log(error));
+  async FETCH_LIST(context, pageName){
+    try {
+      const response = await fetchList(pageName);
+      context.commit('SET_LIST', response.data)
+      return response;        
+    }catch(error){
+      console.log(error);
+    }
   },
 }
