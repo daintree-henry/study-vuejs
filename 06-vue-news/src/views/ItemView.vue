@@ -1,19 +1,12 @@
 <template>
   <div>
     <section>
-      <div class="user-container">
-        <div>
-           User
-        </div>
-        <div class="user-description">
-          <router-link :to="`/user/${fetchItemInfo.user}`">
-            {{ fetchItemInfo.user}}
-          </router-link>
-          <div class="time">
-            {{ fetchItemInfo.time_ago}}
-          </div>
-        </div>
-      </div>
+      <user-profile :info="fetchItemInfo">
+        <router-link slot="username" :to="`/user/${fetchItemInfo.user}`">{{fetchItemInfo.user}}</router-link>
+        <template slot="time">{{ 'Posted '+ fetchItemInfo.time_ago}}</template>
+      </user-profile>
+    </section>
+    <section>
       <h2>
         <p>{{fetchItemInfo.title}}</p>
       </h2>
@@ -25,9 +18,13 @@
 </template>
 
 <script>
+import UserProfile from '../components/UserProfile.vue'
 import { mapGetters } from 'vuex'
 
 export default {
+  components:{
+    UserProfile
+  },
   computed: {
     ...mapGetters(['fetchItemInfo'])
   },
